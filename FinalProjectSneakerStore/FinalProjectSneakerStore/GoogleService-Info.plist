@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyD9a8oWZUCAT0mmgW2Zx0anb7NgW5AlCZo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>281181962313</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>none.FinalProjectSneakerStore</string>
+	<key>PROJECT_ID</key>
+	<string>finalprojectsneakerstore</string>
+	<key>STORAGE_BUCKET</key>
+	<string>finalprojectsneakerstore.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:281181962313:ios:2b48606f77ded83b95bf98</string>
+</dict>
+</plist>
