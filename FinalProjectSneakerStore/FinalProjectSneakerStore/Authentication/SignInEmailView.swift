@@ -11,16 +11,18 @@ import Firebase
 import FirebaseAuth
 
 @MainActor
-final class SignInEmailViewModel: ObservableObject {
+final class SignInViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var errorMessage = ""
     @Published var isSignedIn = false
+    @Published var showErrorNotification = false
 
     func signIn() {
         
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Please enter both email and password."
+            showErrorNotification = true
             return
         }
 
@@ -38,15 +40,16 @@ final class SignInEmailViewModel: ObservableObject {
     }
 }
 
+
 struct SignInEmailView: View {
-    @StateObject private var viewModel = SignInEmailViewModel()
+    @StateObject private var viewModel = SignInViewModel()
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         ScrollView {
             ZStack {
                 VStack(spacing: 16) {
-                    TextField("Username", text: $viewModel.email)
+                    TextField("Email", text: $viewModel.email)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(8)
@@ -71,10 +74,16 @@ struct SignInEmailView: View {
                             .cornerRadius(20)
                     }
                     
-                    if !viewModel.errorMessage.isEmpty {
-                        Text(viewModel.errorMessage)
-                            .foregroundColor(.red)
-                            .font(.subheadline)
+                    if viewModel.showErrorNotification {
+                        ErrorNotificationView(message: viewModel.errorMessage)
+                            .transition(.scale.combined(with: .opacity))
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    withAnimation {
+                                        viewModel.showErrorNotification = false
+                                    }
+                                }
+                            }
                     }
                 }
                 
@@ -101,7 +110,7 @@ struct SignInEmailView: View {
             }
             
             
-            NavigationLink(destination: EmptyView(), isActive: $viewModel.isSignedIn) {
+            NavigationLink(destination: MainScreenView(), isActive: $viewModel.isSignedIn) {
                 EmptyView()
             }
         }

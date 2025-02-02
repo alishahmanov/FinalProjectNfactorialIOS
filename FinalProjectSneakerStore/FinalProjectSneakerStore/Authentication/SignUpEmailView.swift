@@ -7,16 +7,20 @@
 
 
 import SwiftUI
+import FirebaseAuth
+import Firebase
 
 @MainActor
-final class SignUpEmailViewModel: ObservableObject {
+final class SignUpViewModel: ObservableObject {
+    @Published var username = ""
     @Published var email = ""
     @Published var password = ""
     @Published var confirmPassword = ""
-    @Published var goToMain = false
-    @Published var showErrorNotification = false
     @Published var errorMessage = ""
-    
+    @Published var registrationSuccessful = false
+    @Published var showErrorNotification = false
+    @Published var goToMain = false
+
     func signUp() {
         guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
             print("All fields are required")
@@ -33,7 +37,7 @@ final class SignUpEmailViewModel: ObservableObject {
 
         Task {
             do {
-                let returnedUserData = try await AuthenticationManager.shared.createUser(email: email, password: password)
+                let returnedUserData = try await AuthenticationManager.shared.createUser(email: email, password: password, username: username )
                 print("Account created successfully")
                 print(returnedUserData)
                 goToMain = true
@@ -46,15 +50,23 @@ final class SignUpEmailViewModel: ObservableObject {
     }
 }
 
+
 struct SignUpEmailView: View {
-    @StateObject private var viewModel = SignUpEmailViewModel()
+    @StateObject private var viewModel = SignUpViewModel()
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
         ZStack {
             ScrollView {
                 ZStack {
                     VStack(spacing: 16) {
-                        TextField("Username", text: $viewModel.email)
+                        
+                        TextField("Username", text: $viewModel.username)
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                        TextField("Email", text: $viewModel.email)
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
@@ -105,23 +117,21 @@ struct SignUpEmailView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
-                }
-            }
-            ToolbarItem(placement: .principal) {
-                            Text("New User")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.black)
-                        }
-        }
+        .navigationBarItems(
+            leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "chevron.left")
+                    .foregroundColor(.black)
+            },
+            trailing: Text("New User")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.black)
+                .padding(.trailing, 130)
+        )
+
         
-        NavigationLink(destination: EmptyView(), isActive: $viewModel.goToMain) {
+        NavigationLink(destination: MainScreenView(), isActive: $viewModel.goToMain) {
             EmptyView()
         }
     }

@@ -8,6 +8,7 @@ import SwiftUI
 
 struct ThirdOnboarding: View {
     @Binding var onboardingIndex: Int
+    @State var goToWelcomeScreen = false
     var body: some View {
         ZStack {
             Color.white
@@ -178,7 +179,8 @@ struct ThirdOnboarding: View {
                                     .font(.system(size: 17, weight: .semibold, design: .default))
                                     .padding(.bottom,24)
                                 Button {
-                                    onboardingIndex = 0
+                                    goToWelcomeScreen = true
+                                    
                                 } label: {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 30)
@@ -194,7 +196,10 @@ struct ThirdOnboarding: View {
                                 .frame(width: 410, height: 288 )
                                 .offset(x: 0, y: 280)
                         )
+                    
                 )
+            NavigationLink(destination: WelcomePageView(), isActive: $goToWelcomeScreen) {
+            }
         }
     }
 }
