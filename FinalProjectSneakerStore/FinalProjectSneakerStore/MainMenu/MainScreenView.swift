@@ -13,7 +13,7 @@ struct MainScreenView: View {
                     case 2:
                         CartView()
                     case 3:
-                        CatalogView()
+                        ProfileView()
                     default:
                         CatalogView()
                     }
